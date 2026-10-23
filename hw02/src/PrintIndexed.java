@@ -6,7 +6,7 @@ public class PrintIndexed {
     public static void printIndexed(String s) {
         int len = s.length();
         StringBuilder ans = new StringBuilder();
-        for (int i=0; i<len; ++i){
+        for (int i = 0; i < len; ++i) {
             char c = s.charAt(i);
             ans.append(c);
             ans.append(len - i - 1);

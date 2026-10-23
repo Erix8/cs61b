@@ -5,7 +5,7 @@ public class DoubleUp {
      */
     public static String doubleUp(String s) {
         StringBuilder ans = new StringBuilder();
-        for (int i=0; i<s.length(); ++i) {
+        for (int i = 0; i < s.length(); ++i) {
             char c = s.charAt(i);
             ans.append(c).append(c);
         }
