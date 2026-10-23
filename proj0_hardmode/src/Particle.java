@@ -57,4 +57,12 @@ public class Particle {
         flavor = ParticleFlavor.EMPTY;
         lifespan = -1;
     }
+
+    public void fall(Map<Direction, Particle> neighbors) {
+        Particle down = neighbors.get(Direction.DOWN);
+        if (down.flavor == ParticleFlavor.EMPTY) {
+            moveInto(down);
+        }
+    }
+
 }
