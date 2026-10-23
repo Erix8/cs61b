@@ -33,8 +33,14 @@ public class ListExercises {
      */
     /** Returns a new list containing the even integers of L, in order. */
     public static List<Integer> evens(List<Integer> L) {
-        // TODO
-        return null;
+        List<Integer> evens = new ArrayList<>();
+        for (int i = 0; i < L.size(); ++i) {
+            int x = L.get(i);
+            if (x % 2 == 0) {
+                evens.add(x);
+            }
+        }
+        return evens;
     }
 
     /*
@@ -50,6 +56,8 @@ public class ListExercises {
      */
     /** Doubles every integer in L, in place. */
     public static void doubleAll(List<Integer> L) {
-        // TODO
+        for (int i = 0; i < L.size(); ++i) {
+            L.set(i, L.get(i) * 2);
+        }
     }
 }

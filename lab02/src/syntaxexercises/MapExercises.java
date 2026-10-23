@@ -34,7 +34,15 @@ public class MapExercises {
      */
     /** Returns a map from each string in L to the number of times it appears in L. */
     public static Map<String, Integer> countWords(List<String> L) {
-        // TODO
-        return null;
+        Map<String, Integer> m = new HashMap<>();
+        for (int i = 0; i < L.size(); ++i) {
+            String key = L.get(i);
+            if (m.containsKey(key)) {
+                m.put(key, m.get(key) + 1);
+            } else {
+                m.put(key, 1);
+            }
+        }
+        return m;
     }
 }
