@@ -1,3 +1,5 @@
+import edu.princeton.cs.algs4.StdRandom;
+
 import java.util.Map;
 import java.awt.Color;
 
@@ -37,13 +39,21 @@ public class Particle {
                 return Color.CYAN;
             }
             case ParticleFlavor.PLANT -> {
-                return new Color(0, 255, 0);
+                double ratio = (double) Math.clamp(lifespan, 0, PLANT_LIFESPAN) / PLANT_LIFESPAN;
+                int g = 120 + (int) Math.round((255 - 120) * ratio);
+                return new Color(0, g, 0);
             }
             case ParticleFlavor.FIRE -> {
-                return new Color(255, 0, 0);
+                double ratio = (double) Math.clamp(lifespan, 0, FIRE_LIFESPAN) / FIRE_LIFESPAN;
+                int r = (int) Math.round(255 * ratio);
+                return new Color(r, 0, 0);
             }
             case ParticleFlavor.FLOWER -> {
-                return new Color(255, 141, 161);
+                double ratio = (double) Math.clamp(lifespan, 0, FLOWER_LIFESPAN) / FLOWER_LIFESPAN;
+                int r = 120 + (int) Math.round((255 - 120) * ratio);
+                int g = 70 + (int) Math.round((141 - 70) * ratio);
+                int b = 80 + (int) Math.round((161 - 80) * ratio);
+                return new Color(r, g, b);
             }
             default -> {
                 return Color.WHITE;
@@ -62,6 +72,83 @@ public class Particle {
         Particle down = neighbors.get(Direction.DOWN);
         if (down.flavor == ParticleFlavor.EMPTY) {
             moveInto(down);
+        }
+    }
+
+    private void flow(Map<Direction, Particle> n, Direction d) {
+        Particle p = n.get(d);
+        if (p.flavor == ParticleFlavor.EMPTY) {
+            moveInto(p);
+        }
+    }
+
+    public void flow(Map<Direction, Particle> neighbors) {
+        int chance = StdRandom.uniformInt(3);
+        switch (chance) {
+            case 1 -> flow(neighbors, Direction.LEFT);
+
+            case 2 -> flow(neighbors, Direction.RIGHT);
+            default -> {}
+        }
+    }
+
+    private void grow(Map<Direction, Particle> n, Direction d) {
+        Particle p = n.get(d);
+        if (p.flavor == ParticleFlavor.EMPTY) {
+            p.flavor = flavor;
+            p.lifespan = LIFESPANS.get(flavor);
+        }
+    }
+
+    public void grow(Map<Direction, Particle> neighbors) {
+        int chance = StdRandom.uniformInt(10);
+        switch (chance) {
+            case 0 -> grow(neighbors, Direction.UP);
+            case 1 -> grow(neighbors, Direction.LEFT);
+            case 2 -> grow(neighbors, Direction.RIGHT);
+            default -> {}
+        }
+    }
+
+    private void burn(Particle p) {
+        if (p.flavor == ParticleFlavor.PLANT || p.flavor == ParticleFlavor.FLOWER) {
+            int chance = StdRandom.uniformInt(10);
+            if (chance < 4) {
+                p.flavor = ParticleFlavor.FIRE;
+                p.lifespan = LIFESPANS.get(ParticleFlavor.FIRE);
+            }
+        }
+    }
+
+    public void burn(Map<Direction, Particle> neighbors) {
+        burn(neighbors.get(Direction.LEFT));
+        burn(neighbors.get(Direction.RIGHT));
+    }
+
+    public void action(Map<Direction, Particle> neighbors) {
+        if (flavor == ParticleFlavor.EMPTY) {
+            return;
+        }
+        if (flavor != ParticleFlavor.BARRIER) {
+            fall(neighbors);
+        }
+        if (flavor == ParticleFlavor.WATER) {
+            flow(neighbors);
+        }
+        if (flavor == ParticleFlavor.PLANT || flavor == ParticleFlavor.FLOWER) {
+            grow(neighbors);
+        }
+        if (flavor == ParticleFlavor.FIRE) {
+            burn(neighbors);
+        }
+    }
+
+    public void decrementLifespan() {
+        if (lifespan == 0) {
+            flavor = ParticleFlavor.EMPTY;
+            lifespan = -1;
+        } else if (lifespan > 0) {
+            lifespan -= 1;
         }
     }
 

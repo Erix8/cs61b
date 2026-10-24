@@ -52,7 +52,6 @@ public class ParticleSimulator {
         return sb.toString();
     }
 
-
     public void drawParticles() {
         for (int x = 0; x < width; x += 1) {
             for (int y = 0; y < height; y += 1) {
@@ -87,7 +86,8 @@ public class ParticleSimulator {
         for (int y = 0; y < height; ++y) {
             for (int x = 0; x < width; ++x) {
                 Map<Direction, Particle> neighbors = getNeighbors(x, y);
-                particles[x][y].fall(neighbors);
+                particles[x][y].action(neighbors);
+                particles[x][y].decrementLifespan();
             }
         }
     }
