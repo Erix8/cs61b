@@ -88,7 +88,7 @@ public class Particle {
             case 1 -> flow(neighbors, Direction.LEFT);
 
             case 2 -> flow(neighbors, Direction.RIGHT);
-            default -> {}
+            default -> { }
         }
     }
 
@@ -106,7 +106,7 @@ public class Particle {
             case 0 -> grow(neighbors, Direction.UP);
             case 1 -> grow(neighbors, Direction.LEFT);
             case 2 -> grow(neighbors, Direction.RIGHT);
-            default -> {}
+            default -> { }
         }
     }
 
